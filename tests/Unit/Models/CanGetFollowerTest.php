@@ -21,32 +21,41 @@ class CanGetFollowerTest extends TestCase
     }
 
     /** @test */
-    public function a_user_belongs_to_many_following()
+    public function a_user_can_belong_to_many_following()
     {
-        $user = User::factory()->create();
+        $alfredo = User::factory()->create(['name' => 'Alfredo']);
+        $efrain = User::factory()->create(['name' => 'Efrain']);
+        $moises = User::factory()->create(['name' => 'Moises']);
+        $isac = User::factory()->create(['name' => 'Isac']);
 
-        $user->following()->save(
-            Follower::factory()->create()
-        );
-
+        // Alfredo following to Efrain Moises Isac
+        Follower::factory()->create(['user_id'=>$alfredo->id, 'following_id' => $efrain->id]);
+        Follower::factory()->create(['user_id'=>$alfredo->id, 'following_id' => $moises->id]);
+        Follower::factory()->create(['user_id'=>$alfredo->id, 'following_id' => $isac->id]);
         $this->assertInstanceOf(
             'Illuminate\Database\Eloquent\Collection',
-            $user->following);
+            $alfredo->following);
+
+        $this->assertEquals(3, $alfredo->following->count());
     }
 
     /** @test */
-    public function a_user_belongs_to_many_followers()
+    public function a_user_can_belong_to_many_followers()
     {
-        $user = User::factory()->create();
+        $alfredo = User::factory()->create(['name' => 'Alfredo']);
+        $efrain = User::factory()->create(['name' => 'Efrain']);
+        $moises = User::factory()->create(['name' => 'Moises']);
+        $isac = User::factory()->create(['name' => 'Isac']);
 
-        $user->followers()->save(
-            Follower::factory()->create()
-        );
+        // Alfredo has three followers who are efrain moises isac
+        Follower::factory()->create(['following_id' => $alfredo->id, 'user_id'=>$efrain->id]);
+        Follower::factory()->create(['following_id' => $alfredo->id, 'user_id'=>$moises->id]);
+        Follower::factory()->create(['following_id' => $alfredo->id, 'user_id'=>$isac->id]);
 
         $this->assertInstanceOf(
             'Illuminate\Database\Eloquent\Collection',
-            $user->followers
-        );
-    }
+            $alfredo->followers);
 
+        $this->assertEquals(3, $alfredo->followers->count());
+    }
 }

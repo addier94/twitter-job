@@ -89,15 +89,15 @@ class User extends Authenticatable
         );
     }
 
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
     public function tweetsFromFollowing()
     {
-        return $this->hasManyThrough(
-            Tweet::class, Follower::class, 'user_id', 'user_id', 'id', 'following_id'
+         return $this->hasManyThrough(
+            Tweet::class,
+            Follower::class,
+            'user_id', // Foreign key on the Follower table...
+            'user_id', // Foreign key on the Tweet table...
+            'id',  // Local key on the user table...
+            'following_id' // Local key on the Follower table...
         );
     }
 }
