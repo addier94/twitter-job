@@ -8,20 +8,17 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  data() {
-    return {
-      tweets: []
-    }
+  computed: {
+    ...mapGetters({
+      tweets: 'timeline/tweets'
+    })
   },
-
   methods: {
-    async getTweets () {
-      let response = await axios.get('/api/timeline')
-
-      this.tweets = response.data.data
-    }
+    ...mapActions({
+      getTweets: 'timeline/getTweets'
+    })
   },
 
   mounted () {
